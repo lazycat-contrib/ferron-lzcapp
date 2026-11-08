@@ -6,16 +6,14 @@ application:
       backend: file:///lzcapp/pkg/content/licenses/
     - location: /
       backend: http://ferron:80/
-
 services:
   ferron:
-    # upstream: ghcr.io/ferronweb/ferron:2.8.1 (official image)
+    # upstream: ghcr.io/ferronweb/ferron:2.8.1
     image: ghcr.1ms.run/ferronweb/ferron:2.8.1
     environment:
       - TZ=Asia/Shanghai
     binds:
       - /lzcapp/var/mutdata/www:/var/www/ferron
-
 usage: |
   Ferron 是 Rust 编写的现代 Web 服务器（MIT），容器内已配置默认站点：
   监听 80 端口、站点根目录 /var/www/ferron（已持久化到 /lzcapp/var/mutdata/www）。
