@@ -1,0 +1,31 @@
+application:
+  subdomain: ferron
+  multi_instance: false
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://ferron:80/
+
+services:
+  ferron:
+    # upstream: ghcr.io/ferronweb/ferron:2.8.1 (official image)
+    image: ghcr.1ms.run/ferronweb/ferron:2.8.1
+    environment:
+      - TZ=Asia/Shanghai
+    binds:
+      - /lzcapp/var/mutdata/www:/var/www/ferron
+
+usage: |
+  Ferron 是 Rust 编写的现代 Web 服务器（MIT），容器内已配置默认站点：
+  监听 80 端口、站点根目录 /var/www/ferron（已持久化到 /lzcapp/var/mutdata/www）。
+
+  使用方法：
+  1. 打开应用可看到 Ferron 欢迎页；将你的 HTML/静态资源放入
+     /lzcapp/var/mutdata/www（在应用文件管理或宿主机路径）即可替换为你的站点。
+  2. 该包保持镜像内置默认配置（*:80 静态站点）。Ferron 自身无账号体系，
+     因此未开放 public_path，由平台入口鉴权保护（与 dufs/goshs 同判例）。
+
+  说明：
+  - 本包未做实机验证，功能以官方文档为准：https://ferronweb.github.io/
+  - 许可证 MIT，随包分发，见 /package-licenses/。
